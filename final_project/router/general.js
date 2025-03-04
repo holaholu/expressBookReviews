@@ -64,46 +64,39 @@ public_users.get("/isbn/:isbn", function (req, res) {
 });
 
 // Get book details based on author
-public_users.get("/author/:author", function (req, res) {
+public_users.get("/author/:author", async function (req, res) {
   //Retrieve the author using axios and aync await
   const author = req.params.author;
-  axios
-    .get("http://localhost:5001")
-    .then((response) => {
-      //Obtain all the keys for the ‘response.data’ object.
-      let keys = Object.keys(response.data);
+  try {
+    let response = await axios.get("http://localhost:5001");
+    //Obtain all the keys for the ‘response.data’ object.
+    let keys = Object.keys(response.data);
 
-      //Iterate through the keys & check the author matches the one provided in the request parameters.
-      let correctbook = keys.filter((key) => books[key].author === author);
-      let book = books[correctbook[0]];
-
-      res.status(200).send(JSON.stringify(book, null, 4));
-    })
-    .catch((err) => {
-      res.status(404).send("Unable to retrieve book list! " + err);
-    });
+    //Iterate through the keys & check the title matches the one provided in the request parameters.
+    let correctbook = keys.filter((key) => books[key].author === author);
+    let book = books[correctbook[0]];
+    res.status(200).send(JSON.stringify(book, null, 4));
+  } catch (error) {
+    res.status(404).send("Unable to retrieve book! " + err);
+  }
 });
 
 // Get all books based on title
-public_users.get("/title/:title", function (req, res) {
+public_users.get("/title/:title", async function (req, res) {
   //Retrieve the title using axios and aync await
   const title = req.params.title;
-  axios
-    .get("http://localhost:5001")
-    .then((response) => {
-      //Obtain all the keys for the ‘response.data’ object.
-      let keys = Object.keys(response.data);
+  try {
+    let response = await axios.get("http://localhost:5001");
+    //Obtain all the keys for the ‘response.data’ object.
+    let keys = Object.keys(response.data);
 
-      //Iterate through the keys & check the author matches the one provided in the request parameters.
-      let correctbook = keys.filter((key) => books[key].title === title);
-      let book = books[correctbook[0]];
-
-      res.status(200).send(JSON.stringify(book, null, 4));
-    })
-    .catch((err) => {
-      res.status(404).send("Unable to retrieve book list! " + err);
-    });
- 
+    //Iterate through the keys & check the title matches the one provided in the request parameters.
+    let correctbook = keys.filter((key) => books[key].title === title);
+    let book = books[correctbook[0]];
+    res.status(200).send(JSON.stringify(book, null, 4));
+  } catch (error) {
+    res.status(404).send("Unable to retrieve book! " + err);
+  }
 });
 
 //  Get book review
